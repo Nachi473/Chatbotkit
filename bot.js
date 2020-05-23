@@ -93,8 +93,23 @@ controller.ready(() => {
             ]
         });
 
-        let scheduleDialog = new BotkitConversation('SCHEDULE_DIALOG',controller);
-            scheduleDialog.ask('What service do you require?', async(response,convo,bot,full_message)=> {
+        
+            controller.addDialog(scheduleDialog);
+        let profileDialog = new BotkitConversation('PROFILE_DIALOG', controller);
+            //profileDialog.ask('What is your name?', async(res, convo, bot) => {}, {key: 'name'});
+            //profileDialog.ask('What is your gender?', async(res, convo, bot) => {}, {key: 'gender'});
+            //profileDialog.ask('What is your age?', async(res, convo, bot) => {}, {key: 'age'});
+            profileDialog.ask('What is your name?', async(response, convo, bot, full_message) => {
+                await bot.say('Hi ' + response);
+               }, {key: 'name'});
+            profileDialog.ask('What is your gender?', async(response, convo, bot, full_message) => {
+                await bot.say('So you are ' + response);
+               }, {key: 'gender'});
+            profileDialog.ask('What is your age?', async(response, convo, bot, full_message) => {
+                await bot.say('You are ' + response);
+               }, {key: 'age'});
+               //let scheduleDialog = new BotkitConversation('SCHEDULE_DIALOG',controller);
+            profilleDialog.ask('What service do you require?', async(response,convo,bot,full_message)=> {
                 await bot.say(message, {
                     text: 'The services are: ',
                     quick_replies: [
@@ -114,27 +129,16 @@ controller.ready(() => {
                     ]
                 });
             });
-            controller.addDialog(scheduleDialog);
-        let profileDialog = new BotkitConversation('PROFILE_DIALOG', controller);
-            //profileDialog.ask('What is your name?', async(res, convo, bot) => {}, {key: 'name'});
-            //profileDialog.ask('What is your gender?', async(res, convo, bot) => {}, {key: 'gender'});
-            //profileDialog.ask('What is your age?', async(res, convo, bot) => {}, {key: 'age'});
-            profileDialog.ask('What is your name?', async(response, convo, bot, full_message) => {
-                await bot.say('Hi ' + response);
-               }, {key: 'name'});
-            profileDialog.ask('What is your gender?', async(response, convo, bot, full_message) => {
-                await bot.say('So you are ' + response);
-               }, {key: 'gender'});
-            profileDialog.ask('What is your age?', async(response, convo, bot, full_message) => {
-                await bot.say('You are ' + response);
-               }, {key: 'age'});
-               profileDialog.addChildDialog('SCHEDULE_DIALOG','schedulef');
+            //profileDialog.addChildDialog('SCHEDULE_DIALOG','schedulef');
             controller.addDialog(profileDialog);
             
         controller.hears('p', 'message', async(bot, message) => { 
             // do something
+            //await bot.reply(message, )
 
             bot.beginDialog('PROFILE_DIALOG');
+            //controller.afterDialog(profileDialog, )
+            //bot.beginDialog('SCHEDULE_DIALOG');
             
             //bot.beginDialog('SCHEDULE_DIALOG');
             
@@ -154,6 +158,10 @@ controller.ready(() => {
                             }
                         ]
                     });
+                    
+                    controller.hears(['o','c'],'message',async(bot, message) => {
+                        await bot.reply('Please enter date of the month for which you want to schedule your appointment', async(res, convo, bot) => {},{key: 'date'});
+                    })
 
                 });
 
